@@ -22,7 +22,7 @@ listElement* createEl(char* data, size_t size){
     //malloc has had an error
     free(e); //release the previously allocated memory
     return NULL; //return NULL to indicate an error.
-  }
+  } 
   strcpy(dataPointer, data);
   e->data = dataPointer;
   e->size = size;
@@ -58,4 +58,48 @@ void deleteAfter(listElement* after){
   //need to free the memory because we used malloc
   free(delete->data);
   free(delete);
+}
+
+//Returns the number of elements in a linked list
+int length(listElement* list) {
+    listElement* current = list;
+    int count =0;
+    while(current != NULL){
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+//Push a new element onto head of list
+void push(listElement** list, char* data, size_t size){
+	listElement* element = createEl(data,size);
+	element->next = *list;
+	*list = element;
+}
+
+//Pop an element from the head of the list
+listElement* pop(listElement** list){
+	listElement* temp = *list;
+	*list = temp->next;
+	return temp;
+}
+
+//Enqueue element at bottom of list 
+void enqueue(listElement** list, char* data, size_t size){
+	listElement* newHead = createEl(data,size);
+	listElement* oldHead = *list;
+	newHead->next = oldHead;
+	*list = newHead;
+}
+
+//Dequeue element from top of list
+listElement* dequeue(listElement* list){
+	listElement* current = list;
+	while(current->next->next != NULL){
+		current = current->next;
+	}
+	listElement* element = current->next;
+	deleteAfter(current);
+	return element;
 }
